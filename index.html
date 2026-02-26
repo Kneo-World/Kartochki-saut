@@ -70,17 +70,19 @@
     }
     input:focus { outline: none; box-shadow: 0 0 20px cyan; }
     .badge-sold { background: linear-gradient(45deg, #ff0055, #aa00ff); }
-    .file-info {
-      font-size: 0.8rem;
-      color: #0ff;
-      margin-top: 0.25rem;
-      word-break: break-word;
-    }
+    .file-info { font-size: 0.8rem; color: #0ff; margin-top: 0.25rem; word-break: break-word; }
+    .thumbnail { max-width: 100px; max-height: 100px; border-radius: 0.5rem; border: 1px solid cyan; margin: 0.25rem; cursor: pointer; transition: 0.2s; }
+    .thumbnail:hover { transform: scale(1.05); box-shadow: 0 0 15px cyan; }
+    .modal-img { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 90vw; max-height: 90vh; border: 3px solid cyan; border-radius: 1rem; z-index: 1000; }
+    .modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.8); z-index: 999; display: none; }
   </style>
 </head>
 <body class="text-gray-200 relative">
 
-  <!-- параллакс фоны -->
+  <!-- модальное окно для фото -->
+  <div id="modalOverlay" class="modal-overlay" onclick="closeModal()"></div>
+  <img id="modalImage" class="modal-img hidden" src="" alt="">
+
   <div class="fixed inset-0 overflow-hidden pointer-events-none">
     <div class="absolute w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl top-20 left-10 animate-pulse"></div>
     <div class="absolute w-80 h-80 bg-purple-600/20 rounded-full blur-3xl bottom-40 right-10 animate-pulse delay-1000"></div>
@@ -152,7 +154,6 @@
           <label class="flex items-center gap-2 glass-card py-2 px-4 rounded-full"><input type="radio" name="design" value="custom"> <span>Свой дизайн (3 грн)</span></label>
         </div>
         <div id="customDesignUpload" class="mt-3 hidden">
-          <!-- скрытый input file -->
           <input type="file" id="designFileInput" accept="image/*" class="hidden">
           <button id="designFileBtn" class="btn-purple py-2 px-4 rounded-full"><i class="fas fa-upload mr-2"></i>Загрузить эскиз</button>
           <div id="designFileName" class="file-info"></div>
@@ -245,7 +246,9 @@
       let packDesign = 'standard';
       let preview = 'first';
 
-      // Для отслеживания загруженных файлов (просто для отображения)
+      // dataURL загруженных изображений
+      let designFileData = null; // dataURL или null
+      let characterFileData = null;
       let designFileName = '';
       let characterFileName = '';
 
@@ -286,7 +289,24 @@
       const adminLoginBtn = document.getElementById('adminLoginBtn');
       const adminOrdersDiv = document.getElementById('adminOrdersContainer');
 
-      // ---------- ЗАГРУЗКА ФАЙЛОВ (работает на телефоне) ----------
+      // модальные функции
+      window.openModal = function(src) {
+        document.getElementById('modalImage').src = src;
+        document.getElementById('modalImage').classList.remove('hidden');
+        document.getElementById('modalOverlay').style.display = 'block';
+      }
+      window.closeModal = function() {
+        document.getElementById('modalImage').classList.add('hidden');
+        document.getElementById('modalOverlay').style.display = 'none';
+      }
+
+      // ---------- ЗАГРУЗКА ФАЙЛОВ С СОХРАНЕНИЕМ DATAURL ----------
+      function readFileAsDataURL(file, callback) {
+        const reader = new FileReader();
+        reader.onload = (e) => callback(e.target.result);
+        reader.readAsDataURL(file);
+      }
+
       if (designFileBtn && designFileInput) {
         designFileBtn.addEventListener('click', (e) => {
           e.preventDefault();
@@ -294,11 +314,22 @@
         });
         designFileInput.addEventListener('change', function() {
           if (this.files.length > 0) {
-            designFileName = this.files[0].name;
+            const file = this.files[0];
+            // ограничение размера 1 МБ для localStorage
+            if (file.size > 1024 * 1024) {
+              alert('Файл слишком большой (макс 1 МБ). Выберите другое изображение.');
+              this.value = '';
+              return;
+            }
+            designFileName = file.name;
             designFileNameSpan.textContent = '📎 ' + designFileName;
+            readFileAsDataURL(file, (dataURL) => {
+              designFileData = dataURL;
+            });
           } else {
             designFileName = '';
             designFileNameSpan.textContent = '';
+            designFileData = null;
           }
         });
       }
@@ -310,11 +341,21 @@
         });
         characterFileInput.addEventListener('change', function() {
           if (this.files.length > 0) {
-            characterFileName = this.files[0].name;
+            const file = this.files[0];
+            if (file.size > 1024 * 1024) {
+              alert('Файл слишком большой (макс 1 МБ). Выберите другое изображение.');
+              this.value = '';
+              return;
+            }
+            characterFileName = file.name;
             characterFileNameSpan.textContent = '📎 ' + characterFileName;
+            readFileAsDataURL(file, (dataURL) => {
+              characterFileData = dataURL;
+            });
           } else {
             characterFileName = '';
             characterFileNameSpan.textContent = '';
+            characterFileData = null;
           }
         });
       }
@@ -367,8 +408,10 @@
           finalTotal: final,
           totalCards: base.totalCards,
           packs: base.packs,
-          designFile: designFileName || 'не загружен',
-          characterFile: characterFileName || 'не загружен',
+          designFileName: designFileName || 'не загружен',
+          characterFileName: characterFileName || 'не загружен',
+          designFileData: designFileData || null,
+          characterFileData: characterFileData || null,
         };
         return details;
       }
@@ -387,12 +430,12 @@
             ${details.discountPercent > 0 ? `<li class="text-green-400">🎉 Скидка ${details.discountPercent}%</li>` : ''}
             <li class="text-2xl font-bold mt-2">ИТОГО: ${details.finalTotal} грн</li>
             <li class="text-xs text-gray-400">Игра: ${gameName} | Превью: ${preview==='first'?'первые 2':'последние 2'}</li>
-            <li class="text-xs text-cyan-300">Загружено: дизайн ${details.designFile}, персонажи ${details.characterFile}</li>
+            <li class="text-xs text-cyan-300">Загружено: дизайн ${details.designFileName}, персонажи ${details.characterFileName}</li>
           </ul>
         `;
       }
 
-      // ---------- ОТПРАВКА АДМИНУ ----------
+      // ---------- ОТПРАВКА АДМИНУ (с изображениями) ----------
       function sendToAdmin() {
         let details = getFullDetails();
         if (!details) { alert('Минимум 2 карты'); return; }
@@ -408,7 +451,7 @@
         showBreakdown();
       }
 
-      // ---------- АДМИН ПАНЕЛЬ ----------
+      // ---------- АДМИН ПАНЕЛЬ С ФОТО ----------
       function renderAdminOrders() {
         let orders = JSON.parse(localStorage.getItem('kneo_admin_orders') || '[]');
         if (orders.length === 0) {
@@ -425,7 +468,11 @@
             <div class="text-xs text-gray-300 mt-1">Игра: ${ord.game} | Карт: ${ord.totalCards} | Паков: ${ord.packs}</div>
             <button class="text-cyan-400 text-xs mt-2 underline toggle-detail" data-idx="${idx}">Показать детали</button>
             <div id="detail-${idx}" class="hidden mt-2 text-xs bg-cyan-950/40 p-2 rounded">
-              <pre class="whitespace-pre-wrap">${JSON.stringify(ord, null, 2)}</pre>
+              <pre class="whitespace-pre-wrap">${JSON.stringify(ord, null, 2).replace(/("(design|character)FileData":).*?,/g, '$1 "скрыто",')}</pre>
+              <div class="flex gap-2 mt-2">
+                ${ord.designFileData ? `<img src="${ord.designFileData}" class="thumbnail" onclick="openModal('${ord.designFileData}')" title="дизайн: ${ord.designFileName}">` : ''}
+                ${ord.characterFileData ? `<img src="${ord.characterFileData}" class="thumbnail" onclick="openModal('${ord.characterFileData}')" title="персонажи: ${ord.characterFileName}">` : ''}
+              </div>
             </div>
           </div>`;
         });
@@ -510,7 +557,7 @@
       telegramBtn.addEventListener('click', () => {
         let details = getFullDetails();
         if (!details) return;
-        let text = `🧩 ЗАКАЗ KNEO WORLD\nИгра: ${details.game}\nРедкости: ${details.rarities.map(r=>r.name+'('+r.count+')').join(', ')}\nДизайн карт: ${details.design}\nПерсонажи: ${details.character}\nНаклейки: ${details.sticker}\nПак: ${details.packSize} карт, дизайн ${details.packDesign}, превью ${details.preview}\n💰 Сумма со скидкой: ${details.finalTotal} грн (базовая ${details.baseTotal})\n🖼 Загружено: дизайн (${details.designFile}), персонажи (${details.characterFile})`;
+        let text = `🧩 ЗАКАЗ KNEO WORLD\nИгра: ${details.game}\nРедкости: ${details.rarities.map(r=>r.name+'('+r.count+')').join(', ')}\nДизайн карт: ${details.design}\nПерсонажи: ${details.character}\nНаклейки: ${details.sticker}\nПак: ${details.packSize} карт, дизайн ${details.packDesign}, превью ${details.preview}\n💰 Сумма со скидкой: ${details.finalTotal} грн (базовая ${details.baseTotal})\n🖼 Загружено: дизайн (${details.designFileName}), персонажи (${details.characterFileName})`;
         navigator.clipboard.writeText(text).then(() => alert('📋 Заказ скопирован!'));
         window.open('https://t.me/Kneo_World', '_blank');
       });
