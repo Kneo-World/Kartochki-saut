@@ -54,34 +54,12 @@
       box-shadow: 0 0 30px #b300ff;
       transform: scale(1.05);
     }
-    /* анимации */
-    .float-animation {
-      animation: float 6s ease-in-out infinite;
-    }
-    @keyframes float {
-      0% { transform: translateY(0px) translateX(0px); }
-      50% { transform: translateY(-15px) translateX(8px); }
-      100% { transform: translateY(0px) translateX(0px); }
-    }
-    .parallax-bg {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background: radial-gradient(circle at 30% 40%, #00ffff20, transparent 40%),
-                  radial-gradient(circle at 80% 70%, #b300ff20, transparent 40%);
-      filter: blur(60px);
-      z-index: 0;
-      pointer-events: none;
-    }
     .rarity-row {
       background: rgba(255,255,255,0.03);
       border-radius: 1rem;
       padding: 0.75rem;
       margin-bottom: 0.5rem;
       border-left: 4px solid cyan;
-      transition: 0.2s;
     }
     input, select {
       background: rgba(0,0,0,0.6);
@@ -91,17 +69,18 @@
       border-radius: 2rem;
     }
     input:focus { outline: none; box-shadow: 0 0 20px cyan; }
-    .badge-sold {
-      background: linear-gradient(45deg, #ff0055, #aa00ff);
-      color: white;
-      font-weight: bold;
+    .badge-sold { background: linear-gradient(45deg, #ff0055, #aa00ff); }
+    .file-info {
+      font-size: 0.8rem;
+      color: #0ff;
+      margin-top: 0.25rem;
+      word-break: break-word;
     }
   </style>
 </head>
 <body class="text-gray-200 relative">
 
   <!-- параллакс фоны -->
-  <div class="parallax-bg fixed"></div>
   <div class="fixed inset-0 overflow-hidden pointer-events-none">
     <div class="absolute w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl top-20 left-10 animate-pulse"></div>
     <div class="absolute w-80 h-80 bg-purple-600/20 rounded-full blur-3xl bottom-40 right-10 animate-pulse delay-1000"></div>
@@ -121,33 +100,29 @@
       </div>
     </section>
 
-    <!-- КОЛЛЕКЦИИ (прошлые / текущие) -->
+    <!-- КОЛЛЕКЦИИ -->
     <section class="my-20">
       <h2 class="font-gaming text-3xl md:text-4xl mb-8 neon-purple"><i class="fas fa-layer-group mr-2"></i>КОЛЛЕКЦИИ</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- прошлая коллекция: grow a garden (распродано) -->
         <div class="glass-card p-6 rounded-3xl relative overflow-hidden group hover:scale-[1.02] transition-all">
-          <div class="absolute -top-6 -right-6 w-24 h-24 bg-red-600/30 rounded-full blur-2xl"></div>
-          <div class="h-48 rounded-2xl mb-4 bg-gradient-to-br from-emerald-700/40 to-cyan-800/40 flex items-center justify-center border border-cyan-400/40 relative">
+          <div class="h-48 rounded-2xl mb-4 bg-gradient-to-br from-emerald-700/40 to-cyan-800/40 flex items-center justify-center border border-cyan-400/40">
             <i class="fas fa-seedling text-6xl text-emerald-300/80"></i>
-            <span class="absolute bottom-2 right-2 badge-sold px-4 py-1 rounded-full text-sm">SOLD OUT</span>
+            <span class="absolute bottom-2 right-2 badge-sold px-4 py-1 rounded-full text-sm text-white">SOLD OUT</span>
           </div>
           <h3 class="font-gaming text-2xl">Grow a garden 🌱</h3>
           <p class="text-gray-400">Наборы полностью раскупили · 2024</p>
         </div>
-        <!-- текущая коллекция: escape tsunami (в производстве) -->
         <div class="glass-card p-6 rounded-3xl relative overflow-hidden group hover:scale-[1.02] transition-all">
           <div class="h-48 rounded-2xl mb-4 bg-gradient-to-br from-purple-700/40 to-cyan-600/40 flex items-center justify-center border border-purple-400/40">
             <i class="fas fa-water text-6xl text-cyan-300/80"></i>
           </div>
           <h3 class="font-gaming text-2xl">Escape Tsunami For Brainrots 🌊</h3>
           <p class="text-gray-400">В производстве · предзаказ открыт</p>
-          <span class="inline-block mt-2 text-cyan-400 text-sm"><i class="fas fa-hourglass-half"></i> скоро релиз</span>
         </div>
       </div>
     </section>
 
-    <!-- КОНСТРУКТОР НАБОРА -->
+    <!-- КОНСТРУКТОР -->
     <section class="my-20 glass-panel p-6 md:p-10 rounded-3xl" id="constructor">
       <h2 class="font-gaming text-3xl md:text-4xl mb-6 text-cyan-300 neon-cyan flex items-center gap-2">
         <i class="fas fa-cogs"></i> СОЗДАТЬ СВОЙ НАБОР
@@ -159,14 +134,13 @@
         <input type="text" id="gameName" value="Roblox — Grow a garden" class="w-full md:w-2/3 bg-black/40 border-cyan-400 rounded-full p-3">
       </div>
 
-      <!-- Редкости (динамические) -->
+      <!-- Редкости -->
       <div class="mb-8">
         <div class="flex justify-between items-center mb-3">
           <span class="text-xl font-gaming text-purple-300"><i class="fas fa-star mr-2"></i>РЕДКОСТИ (2 грн / слот)</span>
           <button id="addRarityBtn" class="btn-neon px-4 py-2 rounded-full text-sm"><i class="fas fa-plus"></i> ДОБАВИТЬ РЕДКОСТЬ</button>
         </div>
         <div id="rarityContainer"></div>
-        <p class="text-xs text-cyan-400/70 mt-2">Каждая редкость добавляет 2 грн к заказу</p>
       </div>
 
       <!-- Дизайн карточек -->
@@ -178,7 +152,10 @@
           <label class="flex items-center gap-2 glass-card py-2 px-4 rounded-full"><input type="radio" name="design" value="custom"> <span>Свой дизайн (3 грн)</span></label>
         </div>
         <div id="customDesignUpload" class="mt-3 hidden">
-          <button class="btn-purple py-2 px-4 rounded-full"><i class="fas fa-upload mr-2"></i>Загрузить эскиз</button>
+          <!-- скрытый input file -->
+          <input type="file" id="designFileInput" accept="image/*" class="hidden">
+          <button id="designFileBtn" class="btn-purple py-2 px-4 rounded-full"><i class="fas fa-upload mr-2"></i>Загрузить эскиз</button>
+          <div id="designFileName" class="file-info"></div>
         </div>
       </div>
 
@@ -190,13 +167,15 @@
           <label class="flex items-center gap-2 glass-card py-2 px-4 rounded-full"><input type="radio" name="character" value="custom"> <span>Свои персонажи (3 грн)</span></label>
         </div>
         <div id="customCharUpload" class="mt-3 hidden">
-          <button class="btn-purple py-2 px-4 rounded-full"><i class="fas fa-upload mr-2"></i>Загрузить персонажей</button>
+          <input type="file" id="characterFileInput" accept="image/*" class="hidden">
+          <button id="characterFileBtn" class="btn-purple py-2 px-4 rounded-full"><i class="fas fa-upload mr-2"></i>Загрузить персонажей</button>
+          <div id="characterFileName" class="file-info"></div>
         </div>
       </div>
 
       <!-- Наклейки -->
       <div class="mb-8">
-        <p class="text-xl font-gaming text-purple-300 mb-3"><i class="fas fa-sticky-note mr-2"></i>НАКЛЕЙКИ (добавляются к каждой карте)</p>
+        <p class="text-xl font-gaming text-purple-300 mb-3"><i class="fas fa-sticky-note mr-2"></i>НАКЛЕЙКИ (на каждую карту)</p>
         <div class="flex flex-wrap gap-4">
           <label class="glass-card py-2 px-4 rounded-full"><input type="radio" name="sticker" value="none" checked> Без наклеек</label>
           <label class="glass-card py-2 px-4 rounded-full"><input type="radio" name="sticker" value="game"> Из игры (+2 грн)</label>
@@ -227,36 +206,37 @@
         </div>
       </div>
 
-      <!-- ЦЕНА И ДЕЙСТВИЯ -->
+      <!-- ИТОГ и КНОПКИ -->
       <div class="mt-12 flex flex-col md:flex-row gap-4 items-center justify-between border-t border-cyan-500/30 pt-6">
         <div class="text-4xl font-gaming neon-cyan" id="totalPriceDisplay">💰 0 грн</div>
         <div class="flex flex-wrap gap-4">
           <button id="finalizeBtn" class="btn-neon px-8 py-3 rounded-full text-xl"><i class="fas fa-calculator mr-2"></i>РАССЧИТАТЬ</button>
+          <button id="sendToAdminBtn" class="btn-purple px-8 py-3 rounded-full text-xl"><i class="fas fa-paper-plane mr-2"></i>ОТПРАВИТЬ АДМИНУ</button>
           <button id="telegramBtn" class="btn-purple px-8 py-3 rounded-full text-xl"><i class="fab fa-telegram mr-2"></i>КУПИТЬ В TG</button>
         </div>
       </div>
 
-      <!-- Детализация -->
+      <!-- Детализация (после расчёта) -->
       <div id="breakdownPanel" class="mt-6 glass-panel p-4 rounded-2xl hidden"></div>
     </section>
 
-    <!-- скрытый админ (опционально) -->
+    <!-- АДМИН ПАНЕЛЬ -->
     <footer class="relative z-20 text-center text-gray-500 text-sm py-6">
       <span id="adminToggle" class="cursor-pointer hover:text-cyan-400 border-b border-dotted">🔒 admin</span>
-      <div id="adminPanel" class="hidden glass-panel p-6 max-w-md mx-auto mt-4">
-        <h3 class="text-2xl font-gaming text-cyan-300">admin login</h3>
-        <input type="text" id="adminUser" placeholder="Login" class="w-full mt-3" value="KneoWorld123">
-        <input type="password" id="adminPass" placeholder="Password" class="w-full mt-2" value="Илья123">
+      <div id="adminPanel" class="hidden glass-panel p-6 max-w-2xl mx-auto mt-4">
+        <h3 class="text-2xl font-gaming text-cyan-300 mb-3">Вход для администратора</h3>
+        <input type="text" id="adminUser" placeholder="Логин" class="w-full mt-2" value="">
+        <input type="password" id="adminPass" placeholder="Пароль" class="w-full mt-2" value="">
         <button id="adminLoginBtn" class="btn-neon w-full mt-4 py-2">ВОЙТИ</button>
-        <div id="draftOrdersList" class="mt-4 text-left text-sm"></div>
+        <div id="adminOrdersContainer" class="mt-6 text-left text-sm"></div>
       </div>
     </footer>
   </main>
 
   <script>
     (function() {
-      // ------------------- СОСТОЯНИЕ ------------------
-      let rarities = [{ name: 'Обычная', count: 2 }]; // минимум 2 карты
+      // ---------- СОСТОЯНИЕ ----------
+      let rarities = [{ name: 'Обычная', count: 2 }];
       let gameName = 'Roblox — Grow a garden';
       let design = 'standard';
       let character = 'game';
@@ -265,20 +245,38 @@
       let packDesign = 'standard';
       let preview = 'first';
 
-      // DOM
+      // Для отслеживания загруженных файлов (просто для отображения)
+      let designFileName = '';
+      let characterFileName = '';
+
+      // Скидка
+      function applyDiscount(baseTotal) {
+        if (baseTotal > 100) return { final: Math.round(baseTotal * 0.5), percent: 50 };
+        if (baseTotal > 50) return { final: Math.round(baseTotal * 0.8), percent: 20 };
+        return { final: baseTotal, percent: 0 };
+      }
+
+      // DOM-элементы
       const rarityDiv = document.getElementById('rarityContainer');
       const addRarityBtn = document.getElementById('addRarityBtn');
       const gameNameInput = document.getElementById('gameName');
       const designRadios = document.querySelectorAll('input[name="design"]');
-      const customDesign = document.getElementById('customDesignUpload');
+      const customDesignDiv = document.getElementById('customDesignUpload');
+      const designFileBtn = document.getElementById('designFileBtn');
+      const designFileInput = document.getElementById('designFileInput');
+      const designFileNameSpan = document.getElementById('designFileName');
       const charRadios = document.querySelectorAll('input[name="character"]');
-      const customChar = document.getElementById('customCharUpload');
+      const customCharDiv = document.getElementById('customCharUpload');
+      const characterFileBtn = document.getElementById('characterFileBtn');
+      const characterFileInput = document.getElementById('characterFileInput');
+      const characterFileNameSpan = document.getElementById('characterFileName');
       const stickerRadios = document.querySelectorAll('input[name="sticker"]');
       const packSizeInput = document.getElementById('packSize');
       const packDesignSelect = document.getElementById('packDesign');
       const previewRadios = document.querySelectorAll('input[name="preview"]');
       const totalSpan = document.getElementById('totalPriceDisplay');
       const finalizeBtn = document.getElementById('finalizeBtn');
+      const sendToAdminBtn = document.getElementById('sendToAdminBtn');
       const telegramBtn = document.getElementById('telegramBtn');
       const breakdownDiv = document.getElementById('breakdownPanel');
       const adminToggle = document.getElementById('adminToggle');
@@ -286,9 +284,162 @@
       const adminUser = document.getElementById('adminUser');
       const adminPass = document.getElementById('adminPass');
       const adminLoginBtn = document.getElementById('adminLoginBtn');
-      const draftOrdersDiv = document.getElementById('draftOrdersList');
+      const adminOrdersDiv = document.getElementById('adminOrdersContainer');
 
-      // ------------------ ФУНКЦИИ ---------------------
+      // ---------- ЗАГРУЗКА ФАЙЛОВ (работает на телефоне) ----------
+      if (designFileBtn && designFileInput) {
+        designFileBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          designFileInput.click();
+        });
+        designFileInput.addEventListener('change', function() {
+          if (this.files.length > 0) {
+            designFileName = this.files[0].name;
+            designFileNameSpan.textContent = '📎 ' + designFileName;
+          } else {
+            designFileName = '';
+            designFileNameSpan.textContent = '';
+          }
+        });
+      }
+
+      if (characterFileBtn && characterFileInput) {
+        characterFileBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          characterFileInput.click();
+        });
+        characterFileInput.addEventListener('change', function() {
+          if (this.files.length > 0) {
+            characterFileName = this.files[0].name;
+            characterFileNameSpan.textContent = '📎 ' + characterFileName;
+          } else {
+            characterFileName = '';
+            characterFileNameSpan.textContent = '';
+          }
+        });
+      }
+
+      // ---------- ФУНКЦИИ ПОДСЧЁТА ----------
+      function computeBase() {
+        let totalCards = rarities.reduce((acc, r) => acc + (Number(r.count) || 0), 0);
+        if (totalCards < 2) return null;
+
+        let designPrice = design === 'standard' ? 2 : (design === 'rainbow' ? 3 : 3);
+        let charPrice = character === 'game' ? 2 : 3;
+        let stickerPrice = 0;
+        if (sticker === 'game') stickerPrice = 2;
+        else if (sticker === 'custom') stickerPrice = 3;
+        else if (sticker === 'bw') stickerPrice = 1;
+
+        let rarityCost = rarities.length * 2;
+        let packs = Math.ceil(totalCards / (packSize || 1));
+        let packPrice = packDesign === 'standard' ? 5 : 7;
+        let packCost = packs * packPrice;
+
+        let cardBase = totalCards * (designPrice + charPrice + stickerPrice);
+        let baseTotal = cardBase + rarityCost + packCost;
+        return { baseTotal, totalCards, packs, designPrice, charPrice, stickerPrice, rarityCost, packCost, cardBase, packPrice };
+      }
+
+      function updatePriceDisplay() {
+        let base = computeBase();
+        if (!base) {
+          totalSpan.innerText = '⚠️ минимум 2 карты';
+          return null;
+        }
+        let { final, percent } = applyDiscount(base.baseTotal);
+        totalSpan.innerText = `💰 ${final} грн ${percent > 0 ? `(скидка ${percent}%)` : ''}`;
+        return { ...base, final, discountPercent: percent };
+      }
+
+      function getFullDetails() {
+        let base = computeBase();
+        if (!base) return null;
+        let { final, percent } = applyDiscount(base.baseTotal);
+        let stickerName = { none:'Без', game:'Игровые', custom:'Свои', bw:'Ч/б' }[sticker];
+        let details = {
+          game: gameName,
+          rarities: rarities.map(r => ({ name: r.name, count: r.count })),
+          design, character, sticker: stickerName,
+          packSize, packDesign, preview,
+          baseTotal: base.baseTotal,
+          discountPercent: percent,
+          finalTotal: final,
+          totalCards: base.totalCards,
+          packs: base.packs,
+          designFile: designFileName || 'не загружен',
+          characterFile: characterFileName || 'не загружен',
+        };
+        return details;
+      }
+
+      function showBreakdown() {
+        let details = getFullDetails();
+        if (!details) return;
+        breakdownDiv.classList.remove('hidden');
+        breakdownDiv.innerHTML = `
+          <h3 class="text-2xl font-gaming text-purple-300 mb-2"><i class="fas fa-file-invoice mr-2"></i>ДЕТАЛИ ЗАКАЗА</h3>
+          <ul class="space-y-1 text-sm md:text-base">
+            <li>📇 Карт: ${details.totalCards} × дизайн (${details.design==='standard'?2:3}) + перс. (${details.character==='game'?2:3}) + наклейки (${details.sticker==='Без'?0:details.sticker==='Ч/б'?1:details.sticker==='Игровые'?2:3})</li>
+            <li>🔰 Редкостей: ${rarities.length} × 2 = ${rarities.length*2} грн</li>
+            <li>📦 Паков: ${details.packs} шт × ${details.packDesign==='standard'?5:7} = ${details.packDesign==='standard'?details.packs*5:details.packs*7} грн</li>
+            <li class="text-cyan-400">💰 Базовая сумма: ${details.baseTotal} грн</li>
+            ${details.discountPercent > 0 ? `<li class="text-green-400">🎉 Скидка ${details.discountPercent}%</li>` : ''}
+            <li class="text-2xl font-bold mt-2">ИТОГО: ${details.finalTotal} грн</li>
+            <li class="text-xs text-gray-400">Игра: ${gameName} | Превью: ${preview==='first'?'первые 2':'последние 2'}</li>
+            <li class="text-xs text-cyan-300">Загружено: дизайн ${details.designFile}, персонажи ${details.characterFile}</li>
+          </ul>
+        `;
+      }
+
+      // ---------- ОТПРАВКА АДМИНУ ----------
+      function sendToAdmin() {
+        let details = getFullDetails();
+        if (!details) { alert('Минимум 2 карты'); return; }
+        let orders = JSON.parse(localStorage.getItem('kneo_admin_orders') || '[]');
+        let order = {
+          id: Date.now(),
+          time: new Date().toLocaleString(),
+          ...details
+        };
+        orders.push(order);
+        localStorage.setItem('kneo_admin_orders', JSON.stringify(orders));
+        alert('✅ Заказ отправлен администратору!');
+        showBreakdown();
+      }
+
+      // ---------- АДМИН ПАНЕЛЬ ----------
+      function renderAdminOrders() {
+        let orders = JSON.parse(localStorage.getItem('kneo_admin_orders') || '[]');
+        if (orders.length === 0) {
+          adminOrdersDiv.innerHTML = '<p class="text-gray-400">Нет отправленных заказов</p>';
+          return;
+        }
+        let html = '<h4 class="font-bold text-cyan-300 text-lg mb-2">📦 ОТПРАВЛЕННЫЕ ЗАКАЗЫ</h4>';
+        orders.slice().reverse().forEach((ord, idx) => {
+          html += `<div class="border border-purple-500/30 rounded-xl p-3 mb-3 bg-black/20">
+            <div class="flex justify-between items-center">
+              <span class="text-cyan-200">${ord.time}</span>
+              <span class="text-purple-300">${ord.finalTotal} грн</span>
+            </div>
+            <div class="text-xs text-gray-300 mt-1">Игра: ${ord.game} | Карт: ${ord.totalCards} | Паков: ${ord.packs}</div>
+            <button class="text-cyan-400 text-xs mt-2 underline toggle-detail" data-idx="${idx}">Показать детали</button>
+            <div id="detail-${idx}" class="hidden mt-2 text-xs bg-cyan-950/40 p-2 rounded">
+              <pre class="whitespace-pre-wrap">${JSON.stringify(ord, null, 2)}</pre>
+            </div>
+          </div>`;
+        });
+        adminOrdersDiv.innerHTML = html;
+        document.querySelectorAll('.toggle-detail').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            let idx = e.target.dataset.idx;
+            let detailDiv = document.getElementById(`detail-${idx}`);
+            detailDiv.classList.toggle('hidden');
+          });
+        });
+      }
+
+      // ---------- РЕНДЕР РЕДКОСТЕЙ ----------
       function renderRarities() {
         let html = '';
         rarities.forEach((r, idx) => {
@@ -304,14 +455,14 @@
           inp.addEventListener('input', function() {
             let idx = this.dataset.index;
             rarities[idx].name = this.value;
-            updatePrice();
+            updatePriceDisplay();
           });
         });
         document.querySelectorAll('.rarity-count').forEach(inp => {
           inp.addEventListener('input', function() {
             let idx = this.dataset.index;
             rarities[idx].count = parseInt(this.value) || 1;
-            updatePrice();
+            updatePriceDisplay();
           });
         });
         document.querySelectorAll('.remove-rarity').forEach(btn => {
@@ -320,138 +471,51 @@
             if (rarities.length > 1) {
               rarities.splice(idx, 1);
               renderRarities();
-              updatePrice();
+              updatePriceDisplay();
             } else { alert('Должна быть хотя бы одна редкость'); }
           });
         });
       }
 
-      // подсчет цены
-      function updatePrice() {
-        let totalCards = rarities.reduce((acc, r) => acc + (Number(r.count) || 0), 0);
-        if (totalCards < 2) {
-          totalSpan.innerText = '⚠️ минимум 2 карты';
-          return null;
-        }
-
-        // цены за карту
-        let designPrice = design === 'standard' ? 2 : (design === 'rainbow' ? 3 : 3);
-        let charPrice = character === 'game' ? 2 : 3;
-        let stickerPrice = 0;
-        if (sticker === 'game') stickerPrice = 2;
-        else if (sticker === 'custom') stickerPrice = 3;
-        else if (sticker === 'bw') stickerPrice = 1;
-
-        // редкости (слоты)
-        let rarityCost = rarities.length * 2;
-
-        // пакеты
-        let packs = Math.ceil(totalCards / (packSize || 1));
-        let packPrice = packDesign === 'standard' ? 5 : 7;
-        let packCost = packs * packPrice;
-
-        let cardBase = totalCards * (designPrice + charPrice + stickerPrice);
-        let total = cardBase + rarityCost + packCost;
-
-        totalSpan.innerText = `💰 ${total} грн`;
-        return { total, totalCards, packs, designPrice, charPrice, stickerPrice, rarityCost, packCost, cardBase };
-      }
-
-      function showBreakdown() {
-        let data = updatePrice();
-        if (!data) return;
-        let stickerName = { none:'Нет', game:'Игровые', custom:'Свои', bw:'Ч/б' }[sticker];
-        breakdownDiv.classList.remove('hidden');
-        breakdownDiv.innerHTML = `
-          <h3 class="text-2xl font-gaming text-purple-300 mb-2"><i class="fas fa-file-invoice mr-2"></i>ДЕТАЛИ ЗАКАЗА</h3>
-          <ul class="space-y-1 text-sm md:text-base">
-            <li>📇 Карт: ${data.totalCards} × дизайн (${data.designPrice}) + перс. (${data.charPrice}) + наклейки (${data.stickerPrice}) = ${data.cardBase} грн</li>
-            <li>🔰 Редкостей: ${rarities.length} × 2 = ${data.rarityCost} грн</li>
-            <li>📦 Паков: ${data.packs} шт × ${data.packPrice} = ${data.packCost} грн</li>
-            <li class="text-cyan-400 text-xl font-bold mt-2">ИТОГО: ${data.total} грн</li>
-            <li class="text-xs text-gray-400">Игра: ${gameName} | Превью: ${preview === 'first' ? 'первые 2' : 'последние 2'} </li>
-          </ul>
-        `;
-      }
-
-      // сохранение черновика
-      function saveDraft() {
-        let data = updatePrice();
-        if (!data) { alert('❌ Минимум 2 карты'); return false; }
-        let draft = {
-          id: Date.now(),
-          time: new Date().toLocaleString(),
-          game: gameName,
-          rarities: [...rarities],
-          design, character, sticker,
-          packSize, packDesign, preview,
-          total: data.total,
-          cards: data.totalCards
-        };
-        let drafts = JSON.parse(localStorage.getItem('kneo_drafts') || '[]');
-        drafts.push(draft);
-        localStorage.setItem('kneo_drafts', JSON.stringify(drafts));
-        return true;
-      }
-
-      // копирование и Telegram
-      function copyAndOpenTG() {
-        let data = updatePrice();
-        if (!data) return;
-        let stickerName = { none:'нет', game:'игровые', custom:'свои', bw:'ч/б' }[sticker];
-        let text = `🧩 ЗАКАЗ KNEO WORLD\nИгра: ${gameName}\nРедкости: ${rarities.map(r=>r.name+'('+r.count+')').join(', ')}\nДизайн карт: ${design}\nПерсонажи: ${character}\nНаклейки: ${stickerName}\nПак: ${packSize} карт, дизайн ${packDesign}, превью ${preview}\n💰 СУММА: ${data.total} грн`;
-        navigator.clipboard.writeText(text).then(() => alert('📋 Заказ скопирован!'));
-        window.open('https://t.me/Kneo_World', '_blank');
-      }
-
-      // админка
-      function renderDrafts() {
-        let drafts = JSON.parse(localStorage.getItem('kneo_drafts') || '[]');
-        if (!drafts.length) { draftOrdersDiv.innerHTML = '<p class="text-gray-400">нет черновиков</p>'; return; }
-        let html = '<h4 class="font-bold text-cyan-300">📦 ЧЕРНОВИКИ</h4><ul class="mt-2 space-y-2 max-h-60 overflow-auto">';
-        drafts.slice().reverse().forEach(d => {
-          html += `<li class="border-b border-purple-800/50 pb-1 text-xs">${d.time} — ${d.cards} карт, ${d.total} грн (${d.game})</li>`;
-        });
-        html += '</ul>';
-        draftOrdersDiv.innerHTML = html;
-      }
-
-      // ------------------ СОБЫТИЯ ---------------------
-      renderRarities();
-
+      // ---------- СОБЫТИЯ ----------
       gameNameInput.addEventListener('input', (e) => gameName = e.target.value);
 
       designRadios.forEach(r => r.addEventListener('change', (e) => {
         design = e.target.value;
-        customDesign.classList.toggle('hidden', design !== 'custom');
-        updatePrice();
+        customDesignDiv.classList.toggle('hidden', design !== 'custom');
+        updatePriceDisplay();
       }));
       charRadios.forEach(r => r.addEventListener('change', (e) => {
         character = e.target.value;
-        customChar.classList.toggle('hidden', character !== 'custom');
-        updatePrice();
+        customCharDiv.classList.toggle('hidden', character !== 'custom');
+        updatePriceDisplay();
       }));
       stickerRadios.forEach(r => r.addEventListener('change', (e) => {
         sticker = e.target.value;
-        updatePrice();
+        updatePriceDisplay();
       }));
-      packSizeInput.addEventListener('input', (e) => { packSize = parseInt(e.target.value) || 1; updatePrice(); });
-      packDesignSelect.addEventListener('change', (e) => { packDesign = e.target.value; updatePrice(); });
+      packSizeInput.addEventListener('input', (e) => { packSize = parseInt(e.target.value) || 1; updatePriceDisplay(); });
+      packDesignSelect.addEventListener('change', (e) => { packDesign = e.target.value; updatePriceDisplay(); });
       previewRadios.forEach(r => r.addEventListener('change', (e) => { preview = e.target.value; }));
 
       addRarityBtn.addEventListener('click', () => {
         rarities.push({ name: 'Новая', count: 1 });
         renderRarities();
-        updatePrice();
+        updatePriceDisplay();
       });
 
-      finalizeBtn.addEventListener('click', () => {
-        if (saveDraft()) showBreakdown();
+      finalizeBtn.addEventListener('click', showBreakdown);
+      sendToAdminBtn.addEventListener('click', sendToAdmin);
+
+      telegramBtn.addEventListener('click', () => {
+        let details = getFullDetails();
+        if (!details) return;
+        let text = `🧩 ЗАКАЗ KNEO WORLD\nИгра: ${details.game}\nРедкости: ${details.rarities.map(r=>r.name+'('+r.count+')').join(', ')}\nДизайн карт: ${details.design}\nПерсонажи: ${details.character}\nНаклейки: ${details.sticker}\nПак: ${details.packSize} карт, дизайн ${details.packDesign}, превью ${details.preview}\n💰 Сумма со скидкой: ${details.finalTotal} грн (базовая ${details.baseTotal})\n🖼 Загружено: дизайн (${details.designFile}), персонажи (${details.characterFile})`;
+        navigator.clipboard.writeText(text).then(() => alert('📋 Заказ скопирован!'));
+        window.open('https://t.me/Kneo_World', '_blank');
       });
 
-      telegramBtn.addEventListener('click', copyAndOpenTG);
-
-      // магнитные кнопки (простая имитация)
+      // магнитный эффект
       document.querySelectorAll('.magnetic-btn, .btn-neon, .btn-purple').forEach(btn => {
         btn.addEventListener('mousemove', function(e) {
           let rect = this.getBoundingClientRect();
@@ -464,7 +528,6 @@
         });
       });
 
-      // скролл до конструктора
       document.getElementById('startBtn').addEventListener('click', () => {
         document.getElementById('constructor').scrollIntoView({ behavior: 'smooth' });
       });
@@ -473,21 +536,24 @@
       adminToggle.addEventListener('click', () => {
         adminPanel.classList.toggle('hidden');
       });
+
       adminLoginBtn.addEventListener('click', () => {
         if (adminUser.value === 'KneoWorld123' && adminPass.value === 'Илья123') {
-          renderDrafts();
-          adminLoginBtn.innerText = 'УСПЕШНО';
+          renderAdminOrders();
+          adminLoginBtn.innerText = 'ВОШЛИ';
           adminLoginBtn.disabled = true;
-        } else { alert('неверный логин/пароль'); }
+        } else {
+          alert('Неверный логин или пароль');
+        }
       });
 
-      updatePrice();
+      // инициализация
+      renderRarities();
+      updatePriceDisplay();
     })();
   </script>
-  <!-- дополнительная микроанимация -->
   <style>
     .magnetic-btn { transition: transform 0.1s ease; will-change: transform; }
-    .glass-card, .glass-panel { transition: box-shadow 0.3s, transform 0.2s; }
     input[type=radio] { accent-color: cyan; width: 1.2rem; height: 1.2rem; }
   </style>
 </body>
