@@ -3,31 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Kneo World · Брейнроты от Цунами</title>
-    <!-- Tailwind (только для утилит, не ломаем кастомные стили) -->
+    <title>Kneo World · Брейнроты от Цунами · полный конструктор</title>
+    <!-- Tailwind (только для утилит) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Firebase SDK (modular) -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, updateDoc, doc, deleteDoc, arrayUnion, arrayRemove, where, Timestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        
-        const firebaseConfig = {
-            apiKey: "AIzaSyCBLGMkcI7Z-D3OU0FFO8pgeM-G-rd0C9U",
-            authDomain: "sjsjsj-51b87.firebaseapp.com",
-            projectId: "sjsjsj-51b87",
-            storageBucket: "sjsjsj-51b87.firebasestorage.app",
-            messagingSenderId: "98254723261",
-            appId: "1:98254723261:web:785db645581172ea853fd4",
-            measurementId: "G-ZJ1W4M1GLC"
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        window.firebaseDb = db;
-        window.Timestamp = Timestamp;
-        console.log('Firebase ready');
+    <!-- Firebase SDK (модули) -->
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"
+            }
+        }
     </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -211,7 +200,7 @@
             box-shadow: 0 8px 0 #2f1152, 0 0 80px #ff00b3;
         }
 
-        /* наши glass-элементы (для конструктора и идей) */
+        /* наши glass-элементы */
         .glass-panel {
             background: rgba(12,12,22,0.7);
             backdrop-filter: blur(12px);
@@ -269,6 +258,7 @@
             border-radius: 2rem;
         }
         input:focus, textarea:focus { outline: none; box-shadow: 0 0 20px cyan; }
+        .file-info { font-size: 0.8rem; color: #0ff; margin-top: 0.25rem; }
         .thumbnail { max-width: 100px; max-height: 100px; border-radius: 0.5rem; border: 1px solid cyan; cursor: pointer; }
         .idea-card { border-left: 4px solid; }
         .idea-card.approved { border-left-color: #0f0; }
@@ -277,6 +267,15 @@
         .sort-btn.active { background: cyan; color: black; }
         .modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.8); z-index: 999; display: none; }
         .modal-img { position: fixed; top:50%; left:50%; transform: translate(-50%,-50%); max-width: 90vw; max-height: 90vh; border: 3px solid cyan; border-radius: 1rem; z-index: 1000; }
+        .protection {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 3.5rem;
+            background: #0e0c15; border-radius: 60px; padding: 1.5rem 2rem; margin-top: 3rem;
+            border: 1px solid #9336fd; box-shadow: 0 0 30px #3a0e6b; font-weight: 500;
+        }
+        .protection span { display: flex; align-items: center; gap: 0.8rem; font-size: 1.2rem; color: #d6c7ff; }
+        .protection span::before { content: "⚡"; font-size: 1.8rem; filter: drop-shadow(0 0 8px gold); }
+        .watermark { color: #6a4e8f; text-align: center; margin: 2rem 0 1rem; font-size: 0.95rem; border-top: 1px dashed #2e2152; padding-top: 1.8rem; }
+        .neon-top { width: 100%; height: 3px; background: linear-gradient(90deg, transparent, #f0f, #ffd966, #a8f, transparent); margin: 20px 0; }
     </style>
 </head>
 <body>
@@ -313,7 +312,7 @@
         <div class="pack double"><h3>💥 DOUBLE PACK</h3><div class="price">15 ₴</div><div class="desc">2 карты + шанс на легендарку<br><span style="color:#ffd966;">ЭКОНОМИЯ 5 грн!</span></div></div>
     </div>
 
-    <!-- Коллекции (с указанием, что Tsunami доступен) -->
+    <!-- Коллекции -->
     <h2>✦ КОЛЛЕКЦИИ ✦</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         <div class="glass-card p-6 relative">
@@ -334,14 +333,16 @@
         </div>
     </div>
 
-    <!-- КОНСТРУКТОР НАБОРА (ваш собственный) -->
+    <!-- ========== ПОЛНЫЙ КОНСТРУКТОР НАБОРА ========== -->
     <section class="glass-panel my-10" id="constructor">
         <h2 class="text-3xl font-gaming text-cyan-300 neon-cyan flex items-center gap-2"><i class="fas fa-cogs"></i> СОЗДАТЬ СВОЙ НАБОР</h2>
-        <!-- (Весь код конструктора из предыдущего ответа вставлен ниже. Для краткости здесь отображена структура, но в финальном файле он будет полностью рабочим. Пожалуйста, проверьте полную версию в ответе.) -->
+
+        <!-- игра -->
         <div class="mb-8">
-            <label class="block text-lg font-gaming mb-2 text-cyan-200"><i class="fas fa-gamepad mr-2"></i>НАЗВАНИЕ ИГРЫ</label>
+            <label class="block text-lg font-gaming mb-2 text-cyan-200"><i class="fas fa-gamepad mr-2"></i>НАЗВАНИЕ ИГРЫ (Roblox или другая)</label>
             <input type="text" id="gameName" value="Roblox — Grow a garden" class="w-full md:w-2/3 bg-black/40 border-cyan-400 rounded-full p-3">
         </div>
+
         <!-- Редкости (динамические) -->
         <div class="mb-8">
             <div class="flex justify-between items-center mb-3">
@@ -350,9 +351,70 @@
             </div>
             <div id="rarityContainer"></div>
         </div>
-        <!-- Дизайн, персонажи, наклейки, пакеты и т.д. -->
-        <!-- (здесь должен быть полный HTML конструктора, но из-за ограничений длины я оставляю ссылку на предыдущий код) -->
-        <!-- В финальной версии этот блок будет полностью раскрыт, как в предыдущих ответах. -->
+
+        <!-- Дизайн карточек -->
+        <div class="mb-8">
+            <p class="text-xl font-gaming text-purple-300 mb-3"><i class="fas fa-paint-brush mr-2"></i>ДИЗАЙН КАРТОЧКИ (за 1 карту)</p>
+            <div class="flex flex-wrap gap-4">
+                <label class="flex items-center gap-2 glass-card py-2 px-4 rounded-full"><input type="radio" name="design" value="standard" checked> <span>Готовый (2 грн)</span></label>
+                <label class="flex items-center gap-2 glass-card py-2 px-4 rounded-full"><input type="radio" name="design" value="rainbow"> <span>Радужный (3 грн)</span></label>
+                <label class="flex items-center gap-2 glass-card py-2 px-4 rounded-full"><input type="radio" name="design" value="custom"> <span>Свой дизайн (3 грн)</span></label>
+            </div>
+            <div id="customDesignUpload" class="mt-3 hidden">
+                <input type="file" id="designFileInput" accept="image/*" class="hidden">
+                <button id="designFileBtn" class="btn-purple py-2 px-4 rounded-full"><i class="fas fa-upload mr-2"></i>Загрузить эскиз</button>
+                <div id="designFileName" class="file-info"></div>
+            </div>
+        </div>
+
+        <!-- Персонажи -->
+        <div class="mb-8">
+            <p class="text-xl font-gaming text-purple-300 mb-3"><i class="fas fa-user-astronaut mr-2"></i>ПЕРСОНАЖИ (за 1 карту)</p>
+            <div class="flex flex-wrap gap-4">
+                <label class="flex items-center gap-2 glass-card py-2 px-4 rounded-full"><input type="radio" name="character" value="game" checked> <span>Из игры (2 грн)</span></label>
+                <label class="flex items-center gap-2 glass-card py-2 px-4 rounded-full"><input type="radio" name="character" value="custom"> <span>Свои персонажи (3 грн)</span></label>
+            </div>
+            <div id="customCharUpload" class="mt-3 hidden">
+                <input type="file" id="characterFileInput" accept="image/*" class="hidden">
+                <button id="characterFileBtn" class="btn-purple py-2 px-4 rounded-full"><i class="fas fa-upload mr-2"></i>Загрузить персонажей</button>
+                <div id="characterFileName" class="file-info"></div>
+            </div>
+        </div>
+
+        <!-- Наклейки -->
+        <div class="mb-8">
+            <p class="text-xl font-gaming text-purple-300 mb-3"><i class="fas fa-sticky-note mr-2"></i>НАКЛЕЙКИ (на каждую карту)</p>
+            <div class="flex flex-wrap gap-4">
+                <label class="glass-card py-2 px-4 rounded-full"><input type="radio" name="sticker" value="none" checked> Без наклеек</label>
+                <label class="glass-card py-2 px-4 rounded-full"><input type="radio" name="sticker" value="game"> Из игры (+2 грн)</label>
+                <label class="glass-card py-2 px-4 rounded-full"><input type="radio" name="sticker" value="custom"> Свои персонажи (+3 грн)</label>
+                <label class="glass-card py-2 px-4 rounded-full"><input type="radio" name="sticker" value="bw"> Ч/б (+1 грн)</label>
+            </div>
+        </div>
+
+        <!-- Пакеты -->
+        <div class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-lg font-gaming mb-2 text-cyan-200"><i class="fas fa-cubes mr-2"></i>РАЗМЕР ПАКА</label>
+                <input type="number" id="packSize" value="5" min="1" class="w-full bg-black/40 rounded-full">
+            </div>
+            <div>
+                <label class="block text-lg font-gaming mb-2 text-cyan-200"><i class="fas fa-palette mr-2"></i>ДИЗАЙН ПАКА</label>
+                <select id="packDesign" class="w-full rounded-full">
+                    <option value="standard">Обычный (5 грн/пак)</option>
+                    <option value="custom">Свой дизайн (7 грн/пак)</option>
+                </select>
+            </div>
+            <div class="md:col-span-2">
+                <p class="text-lg font-gaming mb-2 text-cyan-200"><i class="fas fa-eye mr-2"></i>КАКИЕ 2 КАРТЫ ПОКАЗАТЬ НА ПАКЕ?</p>
+                <div class="flex gap-6">
+                    <label><input type="radio" name="preview" value="first" checked> Первые две</label>
+                    <label><input type="radio" name="preview" value="last"> Последние две</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- ИТОГ и КНОПКИ -->
         <div class="mt-12 flex flex-col md:flex-row gap-4 items-center justify-between border-t border-cyan-500/30 pt-6">
             <div class="text-4xl font-gaming neon-cyan" id="totalPriceDisplay">💰 0 грн</div>
             <div class="flex flex-wrap gap-4">
@@ -425,25 +487,278 @@
 
 <script type="module">
     // ==================== FIREBASE ИНИЦИАЛИЗАЦИЯ ====================
-    const db = window.firebaseDb;
-    const Timestamp = window.Timestamp;
-    let userId = localStorage.getItem('kneo_user_id') || 'user_' + Math.random().toString(36).substr(2,9);
-    localStorage.setItem('kneo_user_id', userId);
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, updateDoc, doc, deleteDoc, arrayUnion, arrayRemove, where, Timestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCBLGMkcI7Z-D3OU0FFO8pgeM-G-rd0C9U",
+        authDomain: "sjsjsj-51b87.firebaseapp.com",
+        projectId: "sjsjsj-51b87",
+        storageBucket: "sjsjsj-51b87.firebasestorage.app",
+        messagingSenderId: "98254723261",
+        appId: "1:98254723261:web:785db645581172ea853fd4",
+        measurementId: "G-ZJ1W4M1GLC"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Уникальный ID пользователя
+    let userId = localStorage.getItem('kneo_user_id');
+    if (!userId) {
+        userId = 'user_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('kneo_user_id', userId);
+    }
     let isAdmin = false;
 
-    // ==================== КОНСТРУКТОР (СОКРАЩЁННАЯ ВЕРСИЯ, НО РАБОЧАЯ) ====================
-    // В реальном проекте здесь должен быть полный код из предыдущего ответа, включая rarities, функции цены и т.д.
-    // Для демонстрации я добавлю основные переменные и обработчики, чтобы блок не ломался.
-    window.rarities = [{ name: 'Обычная', count: 2 }];
-    window.design = 'standard';
-    window.character = 'game';
-    window.sticker = 'none';
-    window.packSize = 5;
-    window.packDesign = 'standard';
-    window.preview = 'first';
-    // ... (полный код будет вставлен в финальном ответе)
+    // ==================== ПОЛНЫЙ КОНСТРУКТОР ====================
+    // Состояние конструктора
+    let rarities = [{ name: 'Обычная', count: 2 }];
+    let gameName = 'Roblox — Grow a garden';
+    let design = 'standard';
+    let character = 'game';
+    let sticker = 'none';
+    let packSize = 5;
+    let packDesign = 'standard';
+    let preview = 'first';
+    let designFileData = null;
+    let characterFileData = null;
+    let designFileName = '';
+    let characterFileName = '';
 
-    // ==================== НОВЫЙ КОД ИДЕЙ (полностью рабочий) ====================
+    // DOM элементы конструктора
+    const rarityContainer = document.getElementById('rarityContainer');
+    const addRarityBtn = document.getElementById('addRarityBtn');
+    const gameNameInput = document.getElementById('gameName');
+    const designRadios = document.querySelectorAll('input[name="design"]');
+    const customDesignDiv = document.getElementById('customDesignUpload');
+    const designFileBtn = document.getElementById('designFileBtn');
+    const designFileInput = document.getElementById('designFileInput');
+    const designFileNameSpan = document.getElementById('designFileName');
+    const charRadios = document.querySelectorAll('input[name="character"]');
+    const customCharDiv = document.getElementById('customCharUpload');
+    const characterFileBtn = document.getElementById('characterFileBtn');
+    const characterFileInput = document.getElementById('characterFileInput');
+    const characterFileNameSpan = document.getElementById('characterFileName');
+    const stickerRadios = document.querySelectorAll('input[name="sticker"]');
+    const packSizeInput = document.getElementById('packSize');
+    const packDesignSelect = document.getElementById('packDesign');
+    const previewRadios = document.querySelectorAll('input[name="preview"]');
+    const totalSpan = document.getElementById('totalPriceDisplay');
+    const finalizeBtn = document.getElementById('finalizeBtn');
+    const sendToAdminBtn = document.getElementById('sendToAdminBtn');
+    const telegramBtn = document.getElementById('telegramBtn');
+    const breakdownDiv = document.getElementById('breakdownPanel');
+
+    // Функция скидки
+    function applyDiscount(baseTotal) {
+        if (baseTotal > 100) return { final: Math.round(baseTotal * 0.5), percent: 50 };
+        if (baseTotal > 50) return { final: Math.round(baseTotal * 0.8), percent: 20 };
+        return { final: baseTotal, percent: 0 };
+    }
+
+    // Подсчёт базовой цены
+    function computeBase() {
+        let totalCards = rarities.reduce((acc, r) => acc + (Number(r.count) || 0), 0);
+        if (totalCards < 2) return null;
+
+        let designPrice = design === 'standard' ? 2 : (design === 'rainbow' ? 3 : 3);
+        let charPrice = character === 'game' ? 2 : 3;
+        let stickerPrice = 0;
+        if (sticker === 'game') stickerPrice = 2;
+        else if (sticker === 'custom') stickerPrice = 3;
+        else if (sticker === 'bw') stickerPrice = 1;
+
+        let rarityCost = rarities.length * 2;
+        let packs = Math.ceil(totalCards / (packSize || 1));
+        let packPrice = packDesign === 'standard' ? 5 : 7;
+        let packCost = packs * packPrice;
+
+        let cardBase = totalCards * (designPrice + charPrice + stickerPrice);
+        let baseTotal = cardBase + rarityCost + packCost;
+        return { baseTotal, totalCards, packs, designPrice, charPrice, stickerPrice, rarityCost, packCost, cardBase, packPrice };
+    }
+
+    function updatePriceDisplay() {
+        let base = computeBase();
+        if (!base) {
+            totalSpan.innerText = '⚠️ минимум 2 карты';
+            return null;
+        }
+        let { final, percent } = applyDiscount(base.baseTotal);
+        totalSpan.innerText = `💰 ${final} грн ${percent > 0 ? `(скидка ${percent}%)` : ''}`;
+        return { ...base, final, discountPercent: percent };
+    }
+
+    function getFullDetails() {
+        let base = computeBase();
+        if (!base) return null;
+        let { final, percent } = applyDiscount(base.baseTotal);
+        let stickerName = { none:'Без', game:'Игровые', custom:'Свои', bw:'Ч/б' }[sticker];
+        let details = {
+            game: gameName,
+            rarities: rarities.map(r => ({ name: r.name, count: r.count })),
+            design, character, sticker: stickerName,
+            packSize, packDesign, preview,
+            baseTotal: base.baseTotal,
+            discountPercent: percent,
+            finalTotal: final,
+            totalCards: base.totalCards,
+            packs: base.packs,
+            designFileName: designFileName || 'не загружен',
+            characterFileName: characterFileName || 'не загружен',
+            designFileData: designFileData || null,
+            characterFileData: characterFileData || null,
+        };
+        return details;
+    }
+
+    function showBreakdown() {
+        let details = getFullDetails();
+        if (!details) return;
+        breakdownDiv.classList.remove('hidden');
+        breakdownDiv.innerHTML = `
+            <h3 class="text-2xl font-gaming text-purple-300 mb-2"><i class="fas fa-file-invoice mr-2"></i>ДЕТАЛИ ЗАКАЗА</h3>
+            <ul class="space-y-1 text-sm md:text-base">
+                <li>📇 Карт: ${details.totalCards} × дизайн (${details.design==='standard'?2:3}) + перс. (${details.character==='game'?2:3}) + наклейки (${details.sticker==='Без'?0:details.sticker==='Ч/б'?1:details.sticker==='Игровые'?2:3})</li>
+                <li>🔰 Редкостей: ${rarities.length} × 2 = ${rarities.length*2} грн</li>
+                <li>📦 Паков: ${details.packs} шт × ${details.packDesign==='standard'?5:7} = ${details.packDesign==='standard'?details.packs*5:details.packs*7} грн</li>
+                <li class="text-cyan-400">💰 Базовая сумма: ${details.baseTotal} грн</li>
+                ${details.discountPercent > 0 ? `<li class="text-green-400">🎉 Скидка ${details.discountPercent}%</li>` : ''}
+                <li class="text-2xl font-bold mt-2">ИТОГО: ${details.finalTotal} грн</li>
+                <li class="text-xs text-gray-400">Игра: ${gameName} | Превью: ${preview==='first'?'первые 2':'последние 2'}</li>
+                <li class="text-xs text-cyan-300">Загружено: дизайн ${details.designFileName}, персонажи ${details.characterFileName}</li>
+            </ul>
+        `;
+    }
+
+    // Рендер редкостей
+    function renderRarities() {
+        let html = '';
+        rarities.forEach((r, idx) => {
+            html += `<div class="rarity-row flex flex-wrap gap-3 items-center">
+                <input type="text" value="${r.name}" placeholder="название" class="flex-1 min-w-[140px] rarity-name" data-index="${idx}">
+                <input type="number" value="${r.count}" min="1" class="w-24 rarity-count" data-index="${idx}">
+                <button class="text-red-400 hover:text-red-200 remove-rarity px-3 py-1" data-index="${idx}"><i class="fas fa-trash"></i></button>
+            </div>`;
+        });
+        rarityContainer.innerHTML = html;
+
+        document.querySelectorAll('.rarity-name').forEach(inp => {
+            inp.addEventListener('input', function() {
+                let idx = this.dataset.index;
+                rarities[idx].name = this.value;
+                updatePriceDisplay();
+            });
+        });
+        document.querySelectorAll('.rarity-count').forEach(inp => {
+            inp.addEventListener('input', function() {
+                let idx = this.dataset.index;
+                rarities[idx].count = parseInt(this.value) || 1;
+                updatePriceDisplay();
+            });
+        });
+        document.querySelectorAll('.remove-rarity').forEach(btn => {
+            btn.addEventListener('click', function() {
+                let idx = this.dataset.index;
+                if (rarities.length > 1) {
+                    rarities.splice(idx, 1);
+                    renderRarities();
+                    updatePriceDisplay();
+                } else { alert('Должна быть хотя бы одна редкость'); }
+            });
+        });
+    }
+
+    // Загрузка файлов
+    if (designFileBtn && designFileInput) {
+        designFileBtn.addEventListener('click', () => designFileInput.click());
+        designFileInput.addEventListener('change', function() {
+            if (this.files.length) {
+                const file = this.files[0];
+                if (file.size > 1024*1024) { alert('Файл >1 МБ'); this.value=''; return; }
+                designFileName = file.name;
+                designFileNameSpan.textContent = '📎 ' + designFileName;
+                const reader = new FileReader();
+                reader.onload = e => designFileData = e.target.result;
+                reader.readAsDataURL(file);
+            } else {
+                designFileName = '';
+                designFileNameSpan.textContent = '';
+                designFileData = null;
+            }
+        });
+    }
+
+    if (characterFileBtn && characterFileInput) {
+        characterFileBtn.addEventListener('click', () => characterFileInput.click());
+        characterFileInput.addEventListener('change', function() {
+            if (this.files.length) {
+                const file = this.files[0];
+                if (file.size > 1024*1024) { alert('Файл >1 МБ'); this.value=''; return; }
+                characterFileName = file.name;
+                characterFileNameSpan.textContent = '📎 ' + characterFileName;
+                const reader = new FileReader();
+                reader.onload = e => characterFileData = e.target.result;
+                reader.readAsDataURL(file);
+            } else {
+                characterFileName = '';
+                characterFileNameSpan.textContent = '';
+                characterFileData = null;
+            }
+        });
+    }
+
+    // События конструктора
+    gameNameInput.addEventListener('input', (e) => gameName = e.target.value);
+
+    designRadios.forEach(r => r.addEventListener('change', (e) => {
+        design = e.target.value;
+        customDesignDiv.classList.toggle('hidden', design !== 'custom');
+        updatePriceDisplay();
+    }));
+    charRadios.forEach(r => r.addEventListener('change', (e) => {
+        character = e.target.value;
+        customCharDiv.classList.toggle('hidden', character !== 'custom');
+        updatePriceDisplay();
+    }));
+    stickerRadios.forEach(r => r.addEventListener('change', (e) => {
+        sticker = e.target.value;
+        updatePriceDisplay();
+    }));
+    packSizeInput.addEventListener('input', (e) => { packSize = parseInt(e.target.value) || 1; updatePriceDisplay(); });
+    packDesignSelect.addEventListener('change', (e) => { packDesign = e.target.value; updatePriceDisplay(); });
+    previewRadios.forEach(r => r.addEventListener('change', (e) => { preview = e.target.value; }));
+
+    addRarityBtn.addEventListener('click', () => {
+        rarities.push({ name: 'Новая', count: 1 });
+        renderRarities();
+        updatePriceDisplay();
+    });
+
+    finalizeBtn.addEventListener('click', showBreakdown);
+
+    sendToAdminBtn.addEventListener('click', () => {
+        let details = getFullDetails();
+        if (!details) { alert('Минимум 2 карты'); return; }
+        let orders = JSON.parse(localStorage.getItem('kneo_admin_orders') || '[]');
+        orders.push({ id: Date.now(), time: new Date().toLocaleString(), ...details });
+        localStorage.setItem('kneo_admin_orders', JSON.stringify(orders));
+        alert('✅ Заказ отправлен администратору!');
+        showBreakdown();
+    });
+
+    telegramBtn.addEventListener('click', () => {
+        let details = getFullDetails();
+        if (!details) return;
+        let text = `🧩 ЗАКАЗ KNEO WORLD\nИгра: ${details.game}\nРедкости: ${details.rarities.map(r=>r.name+'('+r.count+')').join(', ')}\nДизайн карт: ${details.design}\nПерсонажи: ${details.character}\nНаклейки: ${details.sticker}\nПак: ${details.packSize} карт, дизайн ${details.packDesign}, превью ${details.preview}\n💰 Сумма со скидкой: ${details.finalTotal} грн (базовая ${details.baseTotal})\n🖼 Загружено: дизайн (${details.designFileName}), персонажи (${details.characterFileName})`;
+        navigator.clipboard.writeText(text).then(() => alert('📋 Заказ скопирован!'));
+        window.open('https://t.me/Kneo_World', '_blank');
+    });
+
+    renderRarities();
+    updatePriceDisplay();
+
+    // ==================== БЛОК ИДЕЙ ====================
     const ideaText = document.getElementById('ideaText');
     const ideaImageInput = document.getElementById('ideaImageInput');
     const ideaImageBtn = document.getElementById('ideaImageBtn');
@@ -558,17 +873,18 @@
             adminIdeaPanel.classList.remove('hidden');
             document.getElementById('adminLoginBtn').innerText = 'ВОШЛИ';
             document.getElementById('adminLoginBtn').disabled = true;
-            // показать заказы из localStorage
             const orders = JSON.parse(localStorage.getItem('kneo_admin_orders') || '[]');
             const container = document.getElementById('adminOrdersContainer');
             container.innerHTML = orders.length ? orders.reverse().map(o => `<div class="border-b py-2">${o.time} — ${o.finalTotal} грн (${o.game})</div>`).join('') : '<p>Нет заказов</p>';
         } else alert('Неверный логин/пароль');
     });
 
+    // Прокрутка к конструктору
+    document.getElementById('startBtn').addEventListener('click', () => {
+        document.getElementById('constructor').scrollIntoView({ behavior: 'smooth' });
+    });
+
     loadIdeas();
 </script>
-
-<!-- ВНИМАНИЕ: Для полной функциональности конструктора необходимо вставить весь предыдущий JS-код (функции updatePrice, рендер редкостей и т.д.) -->
-<!-- В финальном ответе этот код будет присутствовать полностью. -->
 </body>
-                                                                                                                                            </html>
+    </html>
