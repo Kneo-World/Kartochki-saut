@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Kneo World · Брейнроты от Цунами</title>
+    <title>Kneo World · Конструктор карточек</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Fonts & Icons -->
@@ -40,7 +40,6 @@
 
         .font-gaming { font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
 
-        /* Glass Cards & Panels */
         .glass-panel {
             background: var(--panel-bg);
             backdrop-filter: blur(16px);
@@ -59,10 +58,8 @@
         .glass-card:hover {
             border-color: rgba(179, 0, 255, 0.4);
             box-shadow: 0 0 20px rgba(179, 0, 255, 0.2);
-            transform: translateY(-2px);
         }
 
-        /* Neon Buttons */
         .btn-neon {
             background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 240, 255, 0.05));
             border: 1px solid var(--neon-cyan);
@@ -91,7 +88,6 @@
             transform: scale(1.02);
         }
 
-        /* Custom Inputs */
         input[type="text"], input[type="number"], input[type="password"], select, textarea {
             background: rgba(10, 8, 16, 0.8) !important;
             border: 1px solid rgba(0, 240, 255, 0.3) !important;
@@ -104,16 +100,13 @@
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.4) !important;
         }
 
-        /* Rarity Cards Grid */
         .rarity-card {
             background: rgba(20, 18, 30, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 16px;
             padding: 1rem;
             text-align: center;
-            transition: 0.2s;
         }
-        .rarity-card:hover { transform: translateY(-3px); }
 
         .common { color: #d1d5db; }
         .rare { color: #60a5fa; text-shadow: 0 0 8px rgba(96, 165, 250, 0.6); }
@@ -126,47 +119,33 @@
             font-weight: 900;
         }
 
-        .tg-giant-btn {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            border: 2px solid var(--neon-gold);
-            box-shadow: 0 0 35px rgba(168, 85, 247, 0.5);
-            transition: all 0.2s ease;
-        }
-        .tg-giant-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 50px rgba(168, 85, 247, 0.8), 0 0 20px var(--neon-gold);
-        }
-
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 999; display: none; }
-        .modal-img { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); max-width: 90vw; max-height: 90vh; border: 2px solid var(--neon-cyan); border-radius: 1rem; z-index: 1000; }
+        .modal-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); max-width: 90vw; max-height: 90vh; z-index: 1000; }
     </style>
 </head>
 <body>
 
 <div class="max-w-6xl mx-auto space-y-8">
 
-    <!-- HERO HEADER -->
+    <!-- HEADER -->
     <header class="glass-panel p-8 text-center relative overflow-hidden">
         <h1 class="font-gaming text-4xl md:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-purple-300 to-cyan-400 mb-4 drop-shadow-[0_0_15px_rgba(179,0,255,0.4)]">
-            ⚡ BRAINROT TSUNAMI ⚡
+            ⚡ KNEO WORLD ⚡
         </h1>
         <p class="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto mb-6">
-            Коллекционные карточки Roblox — собери свой уникальный набор для битвы за мозг!
+            Конструктор брейнрот-карточек Roblox! Создай свой уникальный пак.
         </p>
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm mb-6">
-            <i class="fas fa-check-circle"></i> Escape Tsunami For Brainrots — Доступно к заказу
-        </div>
         <div class="flex flex-wrap justify-center gap-4">
             <button id="startBtn" class="btn-neon font-gaming text-lg px-8 py-3 rounded-full cursor-pointer">
                 🔥 СОЗДАТЬ НАБОР
             </button>
             <a href="https://t.me/Kneo_World" target="_blank" class="btn-purple font-gaming text-lg px-8 py-3 rounded-full flex items-center gap-2">
-                <i class="fab fa-telegram"></i> ТЕЛЕГРАМ КАНАЛ
+                <i class="fab fa-telegram"></i> ТЕЛЕГРАМ
             </a>
         </div>
     </header>
 
-    <!-- РЕДКОСТИ И ДОХОД -->
+    <!-- РЕДКОСТИ -->
     <section>
         <h2 class="font-gaming text-2xl text-purple-300 mb-4 border-l-4 border-amber-400 pl-3">✦ РЕДКОСТИ И ДОХОД ✦</h2>
         <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -178,44 +157,22 @@
         </div>
     </section>
 
-    <!-- ГОТОВЫЕ ПАКИ -->
-    <section>
-        <h2 class="font-gaming text-2xl text-cyan-300 mb-4 border-l-4 border-cyan-400 pl-3">⚡ ГОТОВЫЕ ПАКИ ⚡</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="glass-card p-6 flex justify-between items-center">
-                <div>
-                    <h3 class="font-gaming text-xl text-amber-300">📦 Стандартный Пак</h3>
-                    <p class="text-gray-400 text-sm mt-1">1 случайная карточка (Common – Cosmic)</p>
-                </div>
-                <div class="font-gaming text-3xl font-bold text-white">10 ₴</div>
-            </div>
-            <div class="glass-card p-6 flex justify-between items-center border-amber-400/40 relative overflow-hidden">
-                <div>
-                    <span class="bg-amber-400 text-black text-xs font-bold px-2 py-0.5 rounded-full uppercase">Выгода</span>
-                    <h3 class="font-gaming text-xl text-amber-300 mt-1">💥 DOUBLE PACK</h3>
-                    <p class="text-gray-400 text-sm">2 карты + повышенный шанс на легендарку</p>
-                </div>
-                <div class="font-gaming text-3xl font-bold text-amber-300">15 ₴</div>
-            </div>
-        </div>
-    </section>
-
     <!-- КОНСТРУКТОР -->
     <section class="glass-panel p-6 md:p-8" id="constructor">
         <h2 class="font-gaming text-3xl text-cyan-300 mb-6 flex items-center gap-3">
             <i class="fas fa-cogs"></i> КОНСТРУКТОР НАБОРА
         </h2>
 
-        <!-- Название игры -->
+        <!-- Игра -->
         <div class="mb-6">
             <label class="block font-gaming text-sm text-cyan-200 mb-2">НАЗВАНИЕ ИГРЫ</label>
-            <input type="text" id="gameName" value="Roblox — Grow a garden" class="w-full md:w-1/2 px-4 py-3 rounded-xl text-sm">
+            <input type="text" id="gameName" value="Roblox — Grow a garden" maxlength="50" class="w-full md:w-1/2 px-4 py-3 rounded-xl text-sm">
         </div>
 
         <!-- Редкости -->
         <div class="mb-6">
             <div class="flex justify-between items-center mb-3">
-                <label class="font-gaming text-sm text-purple-300">РЕДКОСТИВ НАБОРЕ (2 грн / слот)</label>
+                <label class="font-gaming text-sm text-purple-300">РЕДКОСТИ (2 грн / слот)</label>
                 <button id="addRarityBtn" class="btn-neon px-3 py-1.5 rounded-lg text-xs font-gaming cursor-pointer">
                     <i class="fas fa-plus mr-1"></i> ДОБАВИТЬ
                 </button>
@@ -223,32 +180,38 @@
             <div id="rarityContainer" class="space-y-3"></div>
         </div>
 
-        <!-- Настройки дизайна -->
+        <!-- Дизайн и Загрузка -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
                 <label class="block font-gaming text-sm text-purple-300 mb-2">ДИЗАЙН КАРТОЧЕК</label>
-                <select id="designSelect" class="w-full px-4 py-3 rounded-xl text-sm">
+                <select id="designSelect" class="w-full px-4 py-3 rounded-xl text-sm mb-3">
                     <option value="standard">Готовый дизайн (2 грн/карта)</option>
                     <option value="rainbow">Радужная рамка (3 грн/карта)</option>
                     <option value="custom">Свой дизайн (3 грн/карта)</option>
                 </select>
-                <div id="customDesignUpload" class="mt-3 hidden">
+                
+                <div id="customDesignBox" class="hidden">
                     <input type="file" id="designFileInput" accept="image/*" class="hidden">
-                    <button id="designFileBtn" type="button" class="btn-purple px-4 py-2 rounded-xl text-xs">Загрузить эскиз</button>
-                    <span id="designFileName" class="text-xs text-cyan-400 ml-2"></span>
+                    <button id="designFileBtn" type="button" class="btn-purple px-4 py-2 rounded-xl text-xs flex items-center gap-2">
+                        <i class="fas fa-upload"></i> Загрузить рамку/рубашку
+                    </button>
+                    <span id="designFileName" class="text-xs text-cyan-400 block mt-1"></span>
                 </div>
             </div>
 
             <div>
                 <label class="block font-gaming text-sm text-purple-300 mb-2">ПЕРСОНАЖИ</label>
-                <select id="characterSelect" class="w-full px-4 py-3 rounded-xl text-sm">
+                <select id="characterSelect" class="w-full px-4 py-3 rounded-xl text-sm mb-3">
                     <option value="game">Из игры (2 грн/карта)</option>
                     <option value="custom">Свои персонажи (3 грн/карта)</option>
                 </select>
-                <div id="customCharUpload" class="mt-3 hidden">
-                    <input type="file" id="characterFileInput" accept="image/*" class="hidden">
-                    <button id="characterFileBtn" type="button" class="btn-purple px-4 py-2 rounded-xl text-xs">Загрузить файлы</button>
-                    <span id="characterFileName" class="text-xs text-cyan-400 ml-2"></span>
+
+                <div id="customCharBox" class="hidden">
+                    <input type="file" id="charFileInput" accept="image/*" class="hidden">
+                    <button id="charFileBtn" type="button" class="btn-purple px-4 py-2 rounded-xl text-xs flex items-center gap-2">
+                        <i class="fas fa-upload"></i> Загрузить персонажей
+                    </button>
+                    <span id="charFileName" class="text-xs text-cyan-400 block mt-1"></span>
                 </div>
             </div>
         </div>
@@ -261,12 +224,12 @@
                     <option value="none">Без наклеек (0 грн)</option>
                     <option value="bw">Черно-белые (+1 грн/карта)</option>
                     <option value="game">Из игры (+2 грн/карта)</option>
-                    <option value="custom">Свой арты (+3 грн/карта)</option>
+                    <option value="custom">Свои арты (+3 грн/карта)</option>
                 </select>
             </div>
             <div>
-                <label class="block font-gaming text-sm text-cyan-200 mb-2">КАРТ В ОДНОМ ПАКЕ</label>
-                <input type="number" id="packSize" value="5" min="1" class="w-full px-4 py-3 rounded-xl text-sm">
+                <label class="block font-gaming text-sm text-cyan-200 mb-2">КАРТ В ПАКЕ (1-99)</label>
+                <input type="number" id="packSize" value="5" min="1" max="99" oninput="if(this.value>99)this.value=99; if(this.value<1)this.value=1;" class="w-full px-4 py-3 rounded-xl text-sm">
             </div>
             <div>
                 <label class="block font-gaming text-sm text-cyan-200 mb-2">ДИЗАЙН УПАКОВКИ</label>
@@ -277,18 +240,21 @@
             </div>
         </div>
 
-        <!-- Итог и Кнопки -->
+        <!-- ИТОГ И КНОПКИ -->
         <div class="border-t border-cyan-500/20 pt-6 flex flex-col md:flex-row gap-6 items-center justify-between">
             <div>
                 <div class="text-xs text-gray-400 uppercase tracking-wider">Итоговая стоимость</div>
-                <div class="font-gaming text-4xl text-cyan-300 mt-1" id="totalPriceDisplay">0 грн</div>
+                <div class="font-gaming text-4xl text-cyan-300 mt-1" id="totalPriceDisplay">0 ₴</div>
             </div>
             <div class="flex flex-wrap gap-3">
                 <button id="finalizeBtn" class="btn-neon px-6 py-3 rounded-xl font-gaming text-sm cursor-pointer">
-                    <i class="fas fa-calculator mr-2"></i> РАССЧИТАТЬ
+                    <i class="fas fa-calculator mr-2"></i> ДЕТАЛИ ЗАКАЗА
+                </button>
+                <button id="sendAdminBtn" class="btn-purple px-6 py-3 rounded-xl font-gaming text-sm cursor-pointer">
+                    <i class="fas fa-paper-plane mr-2"></i> ОТПРАВИТЬ АДМИНУ
                 </button>
                 <button id="telegramBtn" class="btn-purple px-6 py-3 rounded-xl font-gaming text-sm cursor-pointer">
-                    <i class="fab fa-telegram mr-2"></i> ОФОРМИТЬ В TG
+                    <i class="fab fa-telegram mr-2"></i> КУПИТЬ В TG
                 </button>
             </div>
         </div>
@@ -296,40 +262,49 @@
         <div id="breakdownPanel" class="mt-6 glass-card p-6 hidden"></div>
     </section>
 
-    <!-- ИДЕИ И БРАЙНРОТЫ -->
+    <!-- ИДЕИ -->
     <section class="glass-panel p-6 md:p-8" id="ideasBlock">
         <h2 class="font-gaming text-3xl text-purple-300 mb-6 flex items-center gap-3">
             <i class="fas fa-lightbulb text-amber-300"></i> ПРЕДЛОЖИТЬ ИДЕЮ
         </h2>
-        
-        <div class="glass-card p-4 mb-6 border-amber-400/30 flex items-center gap-4">
-            <i class="fas fa-coins text-3xl text-amber-300"></i>
-            <div>
-                <h4 class="font-gaming text-amber-300">Награда за крутую идею!</h4>
-                <p class="text-gray-300 text-sm">За каждую принятую карточку даем от 20 грн бонусами на заказы!</p>
-            </div>
-        </div>
 
         <div class="space-y-4 mb-8">
-            <textarea id="ideaText" placeholder="Напиши свою идею для новой карты брейнрота..." class="w-full p-4 rounded-xl text-sm h-24 resize-none"></textarea>
+            <textarea id="ideaText" placeholder="Напиши свою идею для новой карты брейнрота..." class="w-full p-4 rounded-xl text-sm h-24 resize-none" maxlength="300"></textarea>
             <div class="flex justify-between items-center">
-                <div>
-                    <input type="file" id="ideaImageInput" accept="image/*" class="hidden">
-                    <button id="ideaImageBtn" class="btn-purple px-4 py-2 rounded-xl text-xs"><i class="fas fa-image mr-1"></i> Добавить эскиз</button>
-                    <span id="ideaImageName" class="text-xs text-gray-400 ml-2"></span>
-                </div>
-                <button id="submitIdeaBtn" class="btn-neon px-6 py-2 rounded-xl font-gaming text-xs">ОТПРАВИТЬ</button>
+                <button id="submitIdeaBtn" class="btn-neon px-6 py-2 rounded-xl font-gaming text-xs ml-auto">ОТПРАВИТЬ ИДЕЮ</button>
             </div>
         </div>
 
         <div id="ideasList" class="space-y-4"></div>
     </section>
 
+    <!-- FOOTER & ADMIN LINK -->
+    <footer class="text-center text-xs text-gray-500 pb-6">
+        <button id="adminOpenBtn" class="hover:text-cyan-400 underline cursor-pointer">🔒 Вход для админа</button>
+    </footer>
+
 </div>
 
-<!-- МОДАЛЬНОЕ ОКНО -->
-<div id="modalOverlay" class="modal-overlay" onclick="closeModal()"></div>
-<img id="modalImage" class="modal-img hidden" src="" alt="Enlarged view">
+<!-- АДМИН МОДАЛКА -->
+<div id="adminModal" class="modal-overlay">
+    <div class="modal-box glass-panel p-6 w-full max-w-lg">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-gaming text-xl text-cyan-300">🔑 Панель Администратора</h3>
+            <button id="closeAdminBtn" class="text-gray-400 hover:text-white">&times;</button>
+        </div>
+
+        <div id="adminAuth">
+            <input type="password" id="adminPassInput" placeholder="Введите пароль админа" class="w-full p-3 rounded-xl text-sm mb-3">
+            <button id="adminLoginBtn" class="btn-neon w-full py-2 rounded-xl text-sm font-gaming">ВОЙТИ</button>
+        </div>
+
+        <div id="adminContent" class="hidden space-y-4">
+            <h4 class="font-gaming text-sm text-purple-300">📦 Поступившие заказы:</h4>
+            <div id="ordersList" class="max-h-60 overflow-y-auto space-y-2 text-xs"></div>
+            <button id="clearOrdersBtn" class="btn-purple w-full py-2 rounded-xl text-xs">Очистить список заказов</button>
+        </div>
+    </div>
+</div>
 
 <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
@@ -350,21 +325,27 @@
     let userId = localStorage.getItem('kneo_user_id') || ('user_' + Math.random().toString(36).substr(2, 9));
     localStorage.setItem('kneo_user_id', userId);
 
-    // СОСТОЯНИЕ КОНСТРУКТОРА
-    let rarities = [{ name: 'Common', count: 3 }, { name: 'Rare', count: 2 }];
-    
-    // ЭЛЕМЕНТЫ DOM
-    const rarityContainer = document.getElementById('rarityContainer');
-    const totalPriceDisplay = document.getElementById('totalPriceDisplay');
+    // СОСТОЯНИЕ КОНСТРУКТОР
+    let rarities = [{ name: 'Common', count: 2 }, { name: 'Rare', count: 1 }];
+    let customDesignData = null;
+    let customCharData = null;
 
+    // СЕФТИ ПАРСЕР ДЛЯ ЧИСЕЛ (Защита от взлома цен!)
+    function safeInt(val, min = 1, max = 999) {
+        let parsed = parseInt(val);
+        if (isNaN(parsed) || parsed < min) return min;
+        if (parsed > max) return max;
+        return parsed;
+    }
+
+    // РАСЧЕТ ЦЕНЫ
     function computePrice() {
-        let totalCards = rarities.reduce((acc, r) => acc + (parseInt(r.count) || 0), 0);
-        if (totalCards < 1) return { baseTotal: 0, final: 0, discount: 0 };
+        let totalCards = rarities.reduce((acc, r) => acc + safeInt(r.count, 1, 999), 0);
 
         let design = document.getElementById('designSelect').value;
         let character = document.getElementById('characterSelect').value;
         let sticker = document.getElementById('stickerSelect').value;
-        let packSize = parseInt(document.getElementById('packSize').value) || 1;
+        let packSize = safeInt(document.getElementById('packSize').value, 1, 99);
         let packDesign = document.getElementById('packDesign').value;
 
         let designPrice = design === 'standard' ? 2 : 3;
@@ -382,19 +363,20 @@
         else if (baseTotal >= 50) discount = 20;
 
         let final = Math.round(baseTotal * (1 - discount / 100));
-        return { baseTotal, final, discount, totalCards, packsCount };
+        return { baseTotal, final, discount, totalCards, packsCount, designPrice, charPrice, stickerPrice, packCost, rarityCost };
     }
 
     function updateUI() {
         let { final, discount } = computePrice();
-        totalPriceDisplay.innerHTML = `${final} ₴ ${discount > 0 ? `<span class="text-xs text-emerald-400 font-normal">(-${discount}%)</span>` : ''}`;
+        document.getElementById('totalPriceDisplay').innerHTML = `${new Intl.NumberFormat('ru-RU').format(final)} ₴ ${discount > 0 ? `<span class="text-xs text-emerald-400 font-normal">(-${discount}%)</span>` : ''}`;
     }
 
     function renderRarities() {
-        rarityContainer.innerHTML = rarities.map((r, idx) => `
+        const container = document.getElementById('rarityContainer');
+        container.innerHTML = rarities.map((r, idx) => `
             <div class="flex items-center gap-3 glass-card p-3">
-                <input type="text" value="${r.name}" data-idx="${idx}" class="rarity-name flex-1 px-3 py-1.5 rounded-lg text-sm">
-                <input type="number" value="${r.count}" min="1" data-idx="${idx}" class="rarity-count w-20 px-3 py-1.5 rounded-lg text-sm text-center">
+                <input type="text" value="${r.name}" data-idx="${idx}" maxlength="20" class="rarity-name flex-1 px-3 py-1.5 rounded-lg text-sm">
+                <input type="number" value="${r.count}" min="1" max="999" data-idx="${idx}" class="rarity-count w-20 px-3 py-1.5 rounded-lg text-sm text-center">
                 <button data-idx="${idx}" class="remove-rarity text-red-400 hover:text-red-300 px-2"><i class="fas fa-trash"></i></button>
             </div>
         `).join('');
@@ -403,7 +385,9 @@
             rarities[e.target.dataset.idx].name = e.target.value;
         }));
         document.querySelectorAll('.rarity-count').forEach(el => el.addEventListener('input', (e) => {
-            rarities[e.target.dataset.idx].count = parseInt(e.target.value) || 1;
+            let val = safeInt(e.target.value, 1, 999);
+            e.target.value = val;
+            rarities[e.target.dataset.idx].count = val;
             updateUI();
         }));
         document.querySelectorAll('.remove-rarity').forEach(el => el.addEventListener('click', (e) => {
@@ -411,12 +395,15 @@
                 rarities.splice(e.currentTarget.dataset.idx, 1);
                 renderRarities();
                 updateUI();
+            } else {
+                alert('Нужна хотя бы одна редкость!');
             }
         }));
     }
 
     document.getElementById('addRarityBtn').addEventListener('click', () => {
-        rarities.push({ name: 'New Rarity', count: 1 });
+        if(rarities.length >= 10) return alert('Максимум 10 редкостей!');
+        rarities.push({ name: 'Новая', count: 1 });
         renderRarities();
         updateUI();
     });
@@ -426,33 +413,92 @@
         document.getElementById(id).addEventListener('input', updateUI);
     });
 
+    // ОБРАБОТКА ЗАГРУЗКИ ФАЙЛОВ
     document.getElementById('designSelect').addEventListener('change', (e) => {
-        document.getElementById('customDesignUpload').classList.toggle('hidden', e.target.value !== 'custom');
+        document.getElementById('customDesignBox').classList.toggle('hidden', e.target.value !== 'custom');
     });
     document.getElementById('characterSelect').addEventListener('change', (e) => {
-        document.getElementById('customCharUpload').classList.toggle('hidden', e.target.value !== 'custom');
+        document.getElementById('customCharBox').classList.toggle('hidden', e.target.value !== 'custom');
     });
 
-    // ТЕЛЕГРАМ И ДЕТАЛИ
+    document.getElementById('designFileBtn').addEventListener('click', () => document.getElementById('designFileInput').click());
+    document.getElementById('designFileInput').addEventListener('change', (e) => {
+        let file = e.target.files[0];
+        if (file) {
+            if (file.size > 3 * 1024 * 1024) return alert('Файл слишком большой! Макс 3МБ');
+            document.getElementById('designFileName').innerText = '📎 ' + file.name;
+            let reader = new FileReader();
+            reader.onload = res => customDesignData = res.target.result;
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('charFileBtn').addEventListener('click', () => document.getElementById('charFileInput').click());
+    document.getElementById('charFileInput').addEventListener('change', (e) => {
+        let file = e.target.files[0];
+        if (file) {
+            if (file.size > 3 * 1024 * 1024) return alert('Файл слишком большой! Макс 3МБ');
+            document.getElementById('charFileName').innerText = '📎 ' + file.name;
+            let reader = new FileReader();
+            reader.onload = res => customCharData = res.target.result;
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // ПОКАЗАТЬ ДЕТАЛИ ЗАКАЗА
+    document.getElementById('finalizeBtn').addEventListener('click', () => {
+        let p = computePrice();
+        let breakdown = document.getElementById('breakdownPanel');
+        breakdown.classList.remove('hidden');
+        breakdown.innerHTML = `
+            <h4 class="font-gaming text-lg text-cyan-300 mb-2">📋 Детали калькуляции</h4>
+            <ul class="text-sm space-y-1 text-gray-300">
+                <li>Всего карточек: <b>${p.totalCards} шт.</b></li>
+                <li>Пакетов: <b>${p.packsCount} шт.</b></li>
+                <li>Стоимость редкостей: ${p.rarityCost} грн</li>
+                <li>Стоимость упаковки: ${p.packCost} грн</li>
+                <li class="text-cyan-400">Базовая цена: ${p.baseTotal} грн</li>
+                ${p.discount > 0 ? `<li class="text-emerald-400">Скидка: ${p.discount}%</li>` : ''}
+                <li class="font-bold text-lg text-white mt-2">ИТОГО К ОПЛАТЕ: ${p.final} грн</li>
+            </ul>
+        `;
+    });
+
+    // ОТПРАВКА ЗАКАЗА АДМИНУ (В LocalStorage)
+    document.getElementById('sendAdminBtn').addEventListener('click', () => {
+        let p = computePrice();
+        let game = document.getElementById('gameName').value;
+        let newOrder = {
+            id: Date.now(),
+            date: new Date().toLocaleString(),
+            game,
+            totalCards: p.totalCards,
+            finalTotal: p.final,
+            rarities: rarities.map(r => `${r.name}: ${r.count}`).join(', '),
+            hasCustomDesign: !!customDesignData,
+            hasCustomChar: !!customCharData
+        };
+
+        let orders = JSON.parse(localStorage.getItem('kneo_orders') || '[]');
+        orders.push(newOrder);
+        localStorage.setItem('kneo_orders', JSON.stringify(orders));
+        alert('✅ Заказ отправлен администратору!');
+    });
+
+    // ТЕЛЕГРАМ
     document.getElementById('telegramBtn').addEventListener('click', () => {
         let p = computePrice();
         let game = document.getElementById('gameName').value;
-        let text = `🎮 ЗАКАЗ KNEO WORLD\nИгра: ${game}\nКарточек всего: ${p.totalCards}\nСумма к оплате: ${p.final} ₴`;
+        let text = `🎮 ЗАКАЗ KNEO WORLD\nИгра: ${game}\nКарточек: ${p.totalCards} шт.\nСумма: ${p.final} ₴`;
         navigator.clipboard.writeText(text);
-        alert('Детали заказа скопированы! Открываю Telegram...');
+        alert('Детали заказа скопированы!');
         window.open('https://t.me/Kneo_World', '_blank');
     });
 
-    document.getElementById('startBtn').addEventListener('click', () => {
-        document.getElementById('constructor').scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // FIREBASE IDEAS REALTIME
+    // FIREBASE ИДЕИ
     const ideaText = document.getElementById('ideaText');
-    const submitIdeaBtn = document.getElementById('submitIdeaBtn');
-
-    submitIdeaBtn.addEventListener('click', async () => {
-        if (!ideaText.value.trim()) return alert('Напишите идею!');
+    document.getElementById('submitIdeaBtn').addEventListener('click', async () => {
+        if (!ideaText.value.trim()) return alert('Напишите текст!');
         try {
             await addDoc(collection(db, 'ideas'), {
                 text: ideaText.value.trim(),
@@ -462,8 +508,8 @@
                 likedBy: []
             });
             ideaText.value = '';
-            alert('Идея успешно отправлена!');
-        } catch (e) { alert('Ошибка отправки: ' + e.message); }
+            alert('Идея отправлена!');
+        } catch (e) { alert('Ошибка: ' + e.message); }
     });
 
     onSnapshot(query(collection(db, 'ideas'), orderBy('createdAt', 'desc')), (snapshot) => {
@@ -475,10 +521,10 @@
                 <div class="glass-card p-4 flex justify-between items-center">
                     <div>
                         <p class="text-sm text-gray-200">${data.text}</p>
-                        <span class="text-[10px] text-gray-500">ID: ${data.authorId.slice(0, 6)}</span>
+                        <span class="text-[10px] text-gray-500">Автор: ${data.authorId.slice(0, 6)}</span>
                     </div>
-                    <button data-id="${docSnap.id}" class="like-btn text-xs px-3 py-1.5 rounded-full border ${isLiked ? 'border-red-500 text-red-500' : 'border-gray-600 text-gray-400'} flex items-center gap-1">
-                        ❤️ <span>${data.likes || 0}</span>
+                    <button data-id="${docSnap.id}" class="like-btn text-xs px-3 py-1.5 rounded-full border ${isLiked ? 'border-red-500 text-red-500' : 'border-gray-600 text-gray-400'}">
+                        ❤️ ${data.likes || 0}
                     </button>
                 </div>
             `;
@@ -499,7 +545,47 @@
         });
     });
 
-    // Init
+    // АДМИН ПАНЕЛЬ
+    const adminModal = document.getElementById('adminModal');
+    document.getElementById('adminOpenBtn').addEventListener('click', () => adminModal.style.display = 'block');
+    document.getElementById('closeAdminBtn').addEventListener('click', () => adminModal.style.display = 'none');
+
+    document.getElementById('adminLoginBtn').addEventListener('click', () => {
+        let pass = document.getElementById('adminPassInput').value;
+        if (pass === 'Kneo123' || pass === 'Илья123') {
+            document.getElementById('adminAuth').classList.add('hidden');
+            document.getElementById('adminContent').classList.remove('hidden');
+            loadAdminOrders();
+        } else {
+            alert('Неверный пароль!');
+        }
+    });
+
+    function loadAdminOrders() {
+        let orders = JSON.parse(localStorage.getItem('kneo_orders') || '[]');
+        let container = document.getElementById('ordersList');
+        if(!orders.length) {
+            container.innerHTML = '<p class="text-gray-500">Заказов пока нет</p>';
+            return;
+        }
+        container.innerHTML = orders.map(o => `
+            <div class="p-2 bg-black/40 rounded border border-gray-700">
+                <div><b>${o.date}</b> — ${o.finalTotal} грн</div>
+                <div>Игра: ${o.game} (${o.totalCards} карт)</div>
+                <div class="text-[10px] text-gray-400">Редкости: ${o.rarities}</div>
+            </div>
+        `).join('');
+    }
+
+    document.getElementById('clearOrdersBtn').addEventListener('click', () => {
+        localStorage.removeItem('kneo_orders');
+        loadAdminOrders();
+    });
+
+    document.getElementById('startBtn').addEventListener('click', () => {
+        document.getElementById('constructor').scrollIntoView({ behavior: 'smooth' });
+    });
+
     renderRarities();
     updateUI();
 </script>
